@@ -1,0 +1,169 @@
+<template>
+  <div id="blog-edit-wrapper">
+    <form @submit.prevent="submit">
+
+      <div class="form-group row">
+        <label for="language" class="col-md-1 col-form-label">Language</label>
+        <div class="col-md-11">
+          <select class="form-control" v-model="selectedLanguage">
+            <option v-for="record in languages" :value="record">{{ record | uppercase }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="title" class="col-md-1 col-form-label">{{ selectedLanguage | uppercase }} Title</label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" v-model="input.title[selectedLanguage]">
+        </div>
+
+        <div class="col-md-3">
+          <button type="button" class="btn btn-success w-100" @click="fileListModalVisible = true"><strong>FILES</strong></button>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="category" class="col-md-1 col-form-label">Category</label>
+        <div class="col-md-3">
+          <select class="form-control" v-model="input.category" required>
+            <option v-for="record in categories" :value="record">{{ record | capitalize }}</option>
+          </select>
+        </div>
+
+        <label for="date" class="col-md-1 col-form-label">Date</label>
+        <div class="col-md-3">
+          <input type="date" class="form-control" v-model="input.date" required>
+        </div>
+
+        <label for="thumbnail" class="col-md-1 col-form-label">Thumbnail</label>
+        <div class="col-md-3">
+          <input type="text" class="form-control" v-model="input.thumbnail" required>
+        </div>
+      </div>
+      
+      <div class="form-group row">  
+        <label for="content" class="col-md-1 col-form-label">{{ selectedLanguage | uppercase }} Content</label>
+        <div class="col-md-11">
+          <textarea rows="10" class="form-control" v-model="content[selectedLanguage]" required></textarea>
+        </div>  
+      </div>
+
+      <div class="form-group row">
+        <label for="preview" class="col-md-1 col-form-label">{{ selectedLanguage | uppercase }} Preview</label>
+        <div class="col-md-11">
+          <div class="form-control"><div class="preview" v-html="compiledMarkdown"></div></div>
+        </div>
+      </div>
+
+      <div class="control-actions row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <router-link to="/blog" tag="button" class="btn btn-secondary">Cancel</router-link>
+        </div>
+      </div>
+    </form>
+
+    <div class="modal-bg" v-if="fileListModalVisible"></div>
+    
+    <div class="modal-window-lg" v-if="fileListModalVisible">
+      <app-files-list></app-files-list>
+    </div>
+  </div>
+</template>
+
+<script>
+  import {auth} from '../../db'
+  import {bus} from '../../bus'
+  import { db, storage } from '../../db'
+  import Marked from 'marked'
+  import toMarkdown from 'to-markdown'
+  import categoryObj from '../../categories'
+  import FileList from '../shared/FileList'
+
+  export default {
+    components: {
+      'app-files-list': FileList
+    },
+    data () {
+      return {
+        fileListModalVisible: false,
+        categories: categoryObj.blog,
+        languages: categoryObj.lang,
+        selectedLanguage: 'en',
+        tbFile: {
+          width: this.$route.params.record.tbwidth,
+          height: this.$route.params.record.tbheight
+        },
+        input: {
+          title: {
+            en: this.$route.params.record.title.en,
+            fr: this.$route.params.record.title.fr,
+            de: this.$route.params.record.title.de,
+            es: this.$route.params.record.title.es,
+            pt: this.$route.params.record.title.pt
+          },
+          category: this.$route.params.record.category,
+          date: moment.unix(this.$route.params.record.date).format('YYYY-MM-DD'),
+          thumbnail: this.$route.params.record.thumbnail
+        },
+        content: {
+          en: toMarkdown(this.$route.params.record.content.en),
+          fr: toMarkdown(this.$route.params.record.content.fr),
+          de: toMarkdown(this.$route.params.record.content.de),
+          es: toMarkdown(this.$route.params.record.content.es),
+          pt: toMarkdown(this.$route.params.record.content.pt)
+        }
+      }
+    },
+    firebase: {
+      blogArr: db.ref('blog')
+    },
+    computed: {
+      compiledMarkdown () {
+        return Marked(this.content[this.selectedLanguage], { sanitize: true })
+      }
+    },
+    methods: {
+      submit () {
+        let key = this.$route.params.record['.key']
+        let data = JSON.parse(JSON.stringify(this.input)) // removes getters and setters attached by vuejs
+        data.date = moment(data.date).unix()
+        data.tbwidth = this.tbFile.width
+        data.tbheight = this.tbFile.height
+        data.created = this.$route.params.record.created
+        data.modified = moment().unix() // get current unix timestamp
+        data.lastEditedBy = auth.currentUser.email
+        data.content = {}
+
+        _.each(this.content, (value, key, list) => {
+          data.content[key] = Marked(this.content[key], { sanitize: true })
+        })
+
+        this.$firebaseRefs.blogArr.child(key).set(data)
+        this.$router.go(-1)
+      }
+    },
+    created () {
+      bus.$on('fileListModalVisible', (value) => {
+        this.fileListModalVisible = value
+      })
+      bus.$on('tbSelected', (value) => {
+        this.input.thumbnail = value.url
+        this.tbFile.width = value.width
+        this.tbFile.height= value.height
+      })
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+  @import '../../scss/global.scss';
+  
+  label {
+    font-weight: bold;
+  }
+  textarea {
+    width: 100%;
+  }
+</style>
