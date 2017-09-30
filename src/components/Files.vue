@@ -11,7 +11,7 @@
             </button>
             <ul class="my-dropdown-menu" v-show="dropdownVisible">
               <li @click="searchByCategory('all')">ALL</li>
-              <li v-for="record in categories" @click="searchByCategory(record)">{{ record }}</li>
+              <li v-for="record in categories" @click="searchByCategory(record)" :key="record['.key']">{{ record }}</li>
             </ul>
           </div>
           <input type="text" class="form-control" placeholder="Search..." v-model="keyword" @keyup="searchByKeyword">
@@ -38,7 +38,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="record in chunkedRecords">
+          <tr v-for="record in chunkedRecords" :key="record['.key']">
             <td><a :href="record.url" target="_blank"><img :src="record.url" width="30" height="30"></a></td>
             <td>{{ record.name }}</td>
             <td>{{ record.category }}</td>
@@ -50,15 +50,15 @@
       </table>
 
       <ul class="pagination pagination-sm" v-if="paginationVisible">
-        <li class="page-item page-link" v-for="n in pages" @click="paginate(n)" :class="{active: currentPage == n}">{{ n }}</li>
-      </ul>      
+        <li class="page-item page-link" v-for="n in pages" @click="paginate(n)" :class="{active: currentPage == n}" :key="n">{{ n }}</li>
+      </ul>
     </section>
 
     <div class="modal-bg" v-if="deleteModalVisible || uploadModalVisible"></div>
 
     <section class="modal-window" v-if="deleteModalVisible">
       <h5>Are you sure you want to delete this?</h5>
-      
+
       <div class="control-action">
         <button type="button" class="btn btn-secondary" @click="confirmDelete">Yes</button>
         <button type="button" class="btn btn-secondary" @click="deleteModalVisible = false">No</button>
@@ -66,7 +66,7 @@
     </section>
 
     <section class="modal-window" v-if="uploadModalVisible">
-      
+
       <form @submit.prevent="submit">
         <div class="form-group row">
           <label for="file" class="col-md-2 col-form-label">File</label>
@@ -86,7 +86,7 @@
           <label for="category" class="col-md-2 col-form-label">Category</label>
           <div class="col-md-10">
             <select class="form-control" v-model="input.category" required>
-              <option v-for="record in categories" :value="record">{{ record | uppercase }}</option>
+              <option v-for="record in categories" :value="record" :key="record['.key']">{{ record | uppercase }}</option>
             </select>
           </div>
         </div>
@@ -222,7 +222,7 @@
         vm.start = 0
         vm.end = vm.step
         vm.currentPage = 1
-        
+
         if (vm.selectedCategory === 'all') {
           vm.filteredRecords = _.filter(vm.fileArr, (obj) => {
             let title = obj.name.toLowerCase()

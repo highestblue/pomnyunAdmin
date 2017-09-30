@@ -6,7 +6,7 @@
         <label for="language" class="col-md-1 col-form-label">Language</label>
         <div class="col-md-11">
           <select class="form-control" v-model="selectedLanguage">
-            <option v-for="record in languages" :value="record">{{ record | uppercase }}</option>
+            <option v-for="record in languages" :value="record" :key="record['.key']">{{ record | uppercase }}</option>
           </select>
         </div>
       </div>
@@ -26,7 +26,7 @@
         <label for="category" class="col-md-1 col-form-label">Category</label>
         <div class="col-md-3">
           <select class="form-control" v-model="input.category" required>
-            <option v-for="record in categories" :value="record">{{ record | capitalize }}</option>
+            <option v-for="record in categories" :value="record" :key="record['.key']">{{ record | capitalize }}</option>
           </select>
         </div>
 
@@ -40,12 +40,12 @@
           <input type="text" class="form-control" v-model="input.thumbnail" required>
         </div>
       </div>
-      
-      <div class="form-group row">  
+
+      <div class="form-group row">
         <label for="content" class="col-md-1 col-form-label">{{ selectedLanguage | uppercase }} Content</label>
         <div class="col-md-11">
           <textarea rows="10" class="form-control" v-model="content[selectedLanguage]" required></textarea>
-        </div>  
+        </div>
       </div>
 
       <div class="form-group row">
@@ -65,7 +65,7 @@
     </form>
 
     <div class="modal-bg" v-if="fileListModalVisible"></div>
-    
+
     <div class="modal-window-lg" v-if="fileListModalVisible">
       <app-files-list></app-files-list>
     </div>
@@ -159,7 +159,7 @@
 
 <style lang="scss" scoped>
   @import '../../scss/global.scss';
-  
+
   label {
     font-weight: bold;
   }

@@ -17,12 +17,11 @@
               <input type="password" class="form-control" v-model="input.password" required>
             </div>
           </div>
-
           <button type="submit" class="btn btn-secondary w-100">SUBMIT</button>
-        <form>
+        </form>
       </div>
     </div>
-    
+
   </div>
 </template>
 
@@ -47,7 +46,7 @@
         })
         .then(function() {
           vm.$router.push('dashboard')
-        })  
+        })
       }
     }
   }

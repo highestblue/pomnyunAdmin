@@ -60,7 +60,7 @@
       randomQuote () {
         let vm = this
         let data = _.sample(vm.quotes, 1)
-        return data[0]
+        return data
       }
     }
   }
@@ -80,7 +80,7 @@
 
   #quick-navigation {
     margin-bottom: 100px;
-    
+
     .card {
       @extend .flex-default;
       margin-top: 10px;

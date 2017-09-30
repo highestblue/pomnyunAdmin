@@ -30,11 +30,11 @@
         </thead>
 
         <tbody>
-          <tr v-for="record in sortedRecords">
+          <tr v-for="record in sortedRecords" :key="record['.key']">
             <td><a :href="record.thumbnail" target="_blank"><img :src="record.thumbnail" width="30" height="30"></a></td>
             <td>
               <span style="cursor: pointer" v-if="record.isEnabled === true" @click="disableRecord(record['.key'])"><i class="fa fa-calendar-check-o text-success"></i></span>
-              <span v-else><i class="fa fa-calendar-times-o text-danger"></span>
+              <span v-else><i class="fa fa-calendar-times-o text-danger"></i></span>
             </td>
             <td>{{ record.title.en }}</td>
             <td>{{ record.startDate | date }} - {{ record.endDate | date }} <span class="text-uppercase">{{ record.timezone }}</span></td>
@@ -47,14 +47,14 @@
             </td>
           </tr>
         </tbody>
-      </table> 
+      </table>
     </section>
 
     <div class="modal-bg" v-if="deleteModalVisible || disableModalVisible"></div>
 
     <section class="modal-window" v-if="deleteModalVisible">
       <h5>Are you sure you want to delete this?</h5>
-      
+
       <div class="control-action">
         <button type="button" class="btn btn-secondary" @click="confirmDelete">Yes</button>
         <button type="button" class="btn btn-secondary" @click="deleteModalVisible = false">No</button>
@@ -63,7 +63,7 @@
 
     <section class="modal-window" v-if="disableModalVisible">
       <h5>Are you sure you want to disable this?</h5>
-      
+
       <div class="control-action">
         <button type="button" class="btn btn-secondary" @click="confirmDisable">Yes</button>
         <button type="button" class="btn btn-secondary" @click="disableModalVisible = false">No</button>
@@ -74,6 +74,7 @@
 </template>
 
 <script>
+  import orderBy from 'lodash'
   import {db} from '../../db'
   import filters from '../../filters'
 
@@ -93,12 +94,12 @@
     },
     computed: {
       sortedRecords() {
-        return this.filteredRecords.reverse()
+        return _.orderBy(this.filteredRecords, 'created', 'desc')
       }
     },
     methods: {
       editRecord (record) {
-        this.$router.push({ name: 'eventEdit', params: {key: record['.key'], record: record }}) 
+        this.$router.push({ name: 'eventEdit', params: {key: record['.key'], record: record }})
       },
       disableRecord (key) {
         this.disableModalVisible = true

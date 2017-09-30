@@ -11,7 +11,7 @@
             </button>
             <ul class="my-dropdown-menu" v-show="dropdownVisible">
               <li @click="searchByCategory('all')">All</li>
-              <li v-for="record in categories" @click="searchByCategory(record)">{{ record }}</li>
+              <li v-for="record in categories" @click="searchByCategory(record)" :key="record['.key']">{{ record }}</li>
             </ul>
           </div>
           <input type="text" class="form-control" placeholder="Search..." v-model="keyword" @keyup="searchByKeyword">
@@ -39,7 +39,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="record in sortedRecords">
+          <tr v-for="record in sortedRecords" :key="record['.key']">
             <td>{{ record.title.en }}</td>
             <td>{{ record.category }}</td>
             <td>{{ record.video.en | hasVideo }}</td>
@@ -52,14 +52,14 @@
             </td>
           </tr>
         </tbody>
-      </table>  
+      </table>
     </section>
 
     <div class="modal-bg" v-if="modalVisible"></div>
 
     <section class="modal-window" v-if="modalVisible">
       <h5>Are you sure you want to delete this?</h5>
-      
+
       <div class="control-action">
         <button type="button" class="btn btn-secondary" @click="confirmDelete">Yes</button>
         <button type="button" class="btn btn-secondary" @click="modalVisible = false">No</button>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+  import orderBy from 'lodash'
   import {db} from '../../db'
   import categoryObj from '../../categories'
   import filters from '../../filters'
@@ -92,12 +93,12 @@
     },
     computed: {
       sortedRecords() {
-        return this.filteredRecords.reverse()
+        return _.orderBy(this.filteredRecords, 'created', 'desc')
       }
     },
     methods: {
       editRecord (record) {
-        this.$router.push({ name: 'dharmaEdit', params: {key: record['.key'], record: record }}) 
+        this.$router.push({ name: 'dharmaEdit', params: {key: record['.key'], record: record }})
       },
       deleteRecord (key) {
         this.modalVisible = true
@@ -129,7 +130,7 @@
         vm.start = 0
         vm.end = vm.step
         vm.currentPage = 1
-        
+
         if (vm.selectedCategory === 'all') {
           vm.filteredRecords = _.filter(vm.dharmaArr, (obj) => {
             let title = obj.title['en'].toLowerCase()
@@ -156,7 +157,7 @@
 <style lang="scss" scoped>
   @import '../../scss/variables.scss';
   @import '../../scss/global.scss';
-  
+
   #list {
     table {
       thead {
@@ -172,5 +173,5 @@
         }
       }
     }
-  }  
+  }
 </style>
