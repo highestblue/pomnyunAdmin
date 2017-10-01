@@ -58,7 +58,7 @@
       </table>
 
       <ul class="pagination pagination-sm" v-if="paginationVisible">
-        <li class="page-item page-link" v-for="n in pages" @click="paginate(n)" :class="{active: currentPage == n}" :key="record['.key']">{{ n }}</li>
+        <li class="page-item page-link" v-for="n in pages" @click="paginate(n)" :class="{active: currentPage == n}" :key="n">{{ n }}</li>
       </ul>
     </section>
 
