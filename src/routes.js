@@ -8,6 +8,9 @@ import BlogEdit from './components/blog/Edit.vue'
 import EventList from './components/event/List.vue'
 import EventCreate from './components/event/Create.vue'
 import EventEdit from './components/event/Edit.vue'
+import SlideList from './components/slide/List.vue'
+import SlideCreate from './components/slide/Create.vue'
+import SlideEdit from './components/slide/Edit.vue'
 import Files from './components/Files.vue'
 import Login from './components/Login.vue'
 import { auth } from './db'
@@ -15,7 +18,7 @@ import { auth } from './db'
 export const routes = [
   { path: '/', redirect: '/dashboard' },
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
-  { path: '/login', component: Login, 
+  { path: '/login', component: Login,
     beforeEnter: (to, from, next) => {
       auth.onAuthStateChanged(function(user) {
         if (user) {
@@ -35,6 +38,9 @@ export const routes = [
   { path: '/event', component: EventList, meta: { requiresAuth: true }  },
   { path: '/event/create', component: EventCreate, meta: { requiresAuth: true }  },
   { path: '/event/edit/:key', name: 'eventEdit', component: EventEdit, meta: { requiresAuth: true }  },
+  { path: '/slide', component: SlideList, meta: { requiresAuth: true }  },
+  { path: '/slide/create', component: SlideCreate, meta: { requiresAuth: true }  },
+  { path: '/slide/edit/:key', name: 'slideEdit', component: SlideEdit, meta: { requiresAuth: true }  },
   { path: '/files', component: Files, meta: { requiresAuth: true }  },
   { path: '*', redirect: '/dashboard' }
 ]

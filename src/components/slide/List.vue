@@ -1,6 +1,5 @@
 <template>
-  <div id="event-list-wrapper">
-
+  <div id="slide-list-wrapper">
     <section id="control-menu" class="row justify-content-center">
       <div id="search-bar" class="col-md-10">
         <div class="input-group">
@@ -10,7 +9,7 @@
       </div>
 
       <div class="col-md-2">
-        <router-link to="/event/create" tag="button" class="btn btn-default">Create</router-link>
+        <router-link to="/slide/create" tag="button" class="btn btn-default">Create</router-link>
       </div>
     </section>
 
@@ -20,9 +19,9 @@
           <tr>
             <th></th>
             <th>Status</th>
-            <th>Title</th>
-            <th>Time</th>
-            <th>Venue</th>
+            <th>Name</th>
+            <th>Target URL</th>
+            <th>Button Text</th>
             <th>Created</th>
             <th>Modified</th>
             <th>Action</th>
@@ -31,14 +30,14 @@
 
         <tbody>
           <tr v-for="record in sortedRecords" :key="record['.key']">
-            <td><a :href="record.thumbnail" target="_blank"><img :src="record.thumbnail" width="30" height="30"></a></td>
+            <td><a :href="record.imageURL" target="_blank"><img :src="record.imageURL" width="30" height="30"></a></td>
             <td>
               <span style="cursor: pointer" v-if="record.isEnabled === true" @click="disableRecord(record['.key'])"><i class="fa fa-calendar-check-o text-success"></i></span>
               <span v-else style="cursor: pointer" @click="enableRecord(record['.key'])"><i class="fa fa-calendar-times-o text-danger"></i></span>
             </td>
-            <td>{{ record.title.en }}</td>
-            <td>{{ record.startDate | date }} - {{ record.endDate | date }} <span class="text-uppercase">{{ record.timezone }}</span></td>
-            <td>{{ record.venue }}</td>
+            <td>{{ record.name }}</td>
+            <td>{{ record.targetURL }}</td>
+            <td>{{ record.buttonText }}</td>
             <td>{{ record.created | date }}</td>
             <td>{{ record.modified | date }}</td>
             <td class="control-action">
@@ -65,7 +64,7 @@
 
 <script>
   import orderBy from 'lodash'
-  import {db} from '../../db'
+  import { db } from '../../db'
   import filters from '../../filters'
 
   export default {
@@ -79,7 +78,7 @@
       }
     },
     firebase: {
-      eventArr: db.ref('event')
+      slideArr: db.ref('slide')
     },
     computed: {
       sortedRecords() {
@@ -88,13 +87,13 @@
     },
     methods: {
       editRecord (record) {
-        this.$router.push({ name: 'eventEdit', params: {key: record['.key'], record: record }})
+        this.$router.push({ name: 'slideEdit', params: {key: record['.key'], record: record }})
       },
       disableRecord (key) {
-        this.$firebaseRefs.eventArr.child(key).child('isEnabled').set(false)
+        this.$firebaseRefs.slideArr.child(key).child('isEnabled').set(false)
       },
       enableRecord (key) {
-        this.$firebaseRefs.eventArr.child(key).child('isEnabled').set(true)
+        this.$firebaseRefs.slideArr.child(key).child('isEnabled').set(true)
       },
       deleteRecord (key) {
         this.deleteModalVisible = true
@@ -102,22 +101,22 @@
       },
       confirmDelete () {
         let key = this.selectedKey
-        this.$firebaseRefs.eventArr.child(key).remove()
+        this.$firebaseRefs.slideArr.child(key).remove()
         this.deleteModalVisible = false
       },
       searchByKeyword () {
         let vm = this
         let keyword = vm.keyword.toLowerCase()
-        vm.filteredRecords = _.filter(vm.eventArr, (obj) => {
-          let title = obj.title['en'].toLowerCase()
-          if (title.includes(keyword)) {
+        vm.filteredRecords = _.filter(vm.slideArr, (obj) => {
+          let name = obj.name.toLowerCase()
+          if (name.includes(keyword)) {
             return obj
           }
         })
       }
     },
     created () {
-      this.filteredRecords = this.eventArr
+      this.filteredRecords = this.slideArr
     }
   }
 </script>

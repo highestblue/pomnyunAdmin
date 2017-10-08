@@ -4,17 +4,18 @@
       <div class="row justify-content-between align-items-center">
         <ul class="row justify-conten-left align-items-center">
           <router-link to="/dashboard" tag="li" class="nav-item"><img src="../../../static/jungto-ci.png" width="30" height="30"></router-link>
+          <router-link to="/slide" activeClass="active" tag="li" class="nav-item"><a class="nav-link">slide</a></router-link>
           <router-link to="/dharma" activeClass="active" tag="li" class="nav-item"><a class="nav-link">q&a</a></router-link>
           <router-link to="/event" activeClass="active" tag="li" class="nav-item"><a class="nav-link">event</a></router-link>
           <router-link to="/blog" activeClass="active" tag="li" class="nav-item"><a class="nav-link">blog</a></router-link>
           <router-link to="/files" activeClass="active" tag="li" class="nav-item"><a class="nav-link">files</a></router-link>
         </ul>
-      
+
         <ul class="row justify-content-right align-items-center">
           <router-link to="/login" tag="li" class="nav-item" v-if="!isLoggedin"><a class="nav-link">Login</a></router-link>
           <span v-if="isLoggedin" class="mr-1">{{ user }}</span>
           <li class="nav-item" v-if="isLoggedin" @click="logout" style="cursor: pointer"><a class="nav-link">Logout</a></li>
-        </ul>  
+        </ul>
       </div>
     </div>
   </div>
@@ -80,12 +81,12 @@
           font-weight: bold;
           text-transform: uppercase;
           padding: 0 20px;
-          
+
           &:hover, &:focus, &:active {
             color: $color1;
           }
         }
-        
+
         &.active {
           a {
             color: $color1;
