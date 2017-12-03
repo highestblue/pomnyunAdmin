@@ -18,15 +18,21 @@
           <input type="text" class="form-control" v-model="input.targetURL">
         </div>
 
-        <label for="imageURL" class="col-md-1 col-form-label">Image URL</label>
+        <label for="targetWindow" class="col-md-1 col-form-label">Target Window</label>
         <div class="col-md-5">
-          <input type="text" class="form-control" v-model="input.imageURL" required>
+          <label class="radio-inline"><input type="radio" name="option" value="_self" v-model="input.targetWindow">Self</label>
+          <label class="radio-inline"><input type="radio" name="option" value="_blank" v-model="input.targetWindow">New</label>
         </div>
       </div>
 
       <div class="form-group row">
+        <label for="imageURL" class="col-md-1 col-form-label">Image URL</label>
+        <div class="col-md-5">
+          <input type="text" class="form-control" v-model="input.imageURL" required>
+        </div>
+
         <label for="buttonText" class="col-md-1 col-form-label">Button Text</label>
-        <div class="col-md-11">
+        <div class="col-md-5">
           <input type="text" class="form-control" v-model="input.buttonText">
         </div>
       </div>
@@ -64,6 +70,7 @@
         input: {
           name: '',
           targetURL: '',
+          targetWindow: '',
           imageURL: '',
           buttonText: ''
         }
@@ -99,7 +106,16 @@
 
   label {
     font-weight: bold;
+
+    &.radio-inline {
+      margin-right: 5px;
+
+      input {
+        margin-right: 5px;
+      }
+    }
   }
+
   textarea {
     width: 100%;
   }
