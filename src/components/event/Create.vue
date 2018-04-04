@@ -25,12 +25,12 @@
       <div class="form-group row">
         <label for="startdate" class="col-md-1 col-form-label">Start Date</label>
         <div class="col-md-3">
-          <input type="datetime-local" class="form-control" v-model="input.startDate" required>
+          <input type="text" class="form-control" v-model="input.startDate" required>
         </div>
 
         <label for="enddate" class="col-md-1 col-form-label">End Date</label>
         <div class="col-md-3">
-          <input type="datetime-local" class="form-control" v-model="input.endDate" required>
+          <input type="text" class="form-control" v-model="input.endDate" required>
         </div>
 
         <label for="timezone" class="col-md-1 col-form-label">Timezone</label>
@@ -148,8 +148,8 @@
         data.tbwidth = this.tbFile.width
         data.tbheight = this.tbFile.height
         data.isEnabled = true
-        data.startDate = moment(data.startDate).unix()
-        data.endDate = moment(data.endDate).unix()
+        data.startDate = this.input.startDate
+        data.endDate = this.input.endDate
         data.created = moment().unix() // get current unix timestamp
         data.lastEditedBy = auth.currentUser.email
         data.content = {}

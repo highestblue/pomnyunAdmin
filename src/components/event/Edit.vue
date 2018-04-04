@@ -25,12 +25,12 @@
       <div class="form-group row">
         <label for="startdate" class="col-md-1 col-form-label">Start Date</label>
         <div class="col-md-3">
-          <input type="datetime-local" class="form-control" v-model="input.startDate" required>
+          <input type="text" class="form-control" v-model="input.startDate" required>
         </div>
 
         <label for="enddate" class="col-md-1 col-form-label">End Date</label>
         <div class="col-md-3">
-          <input type="datetime-local" class="form-control" v-model="input.endDate" required>
+          <input type="text" class="form-control" v-model="input.endDate" required>
         </div>
 
         <label for="timezone" class="col-md-1 col-form-label">Timezone</label>
@@ -124,8 +124,8 @@
             es: this.$route.params.record.title.es,
             pt: this.$route.params.record.title.pt
           },
-          startDate: moment.unix(this.$route.params.record.startDate).format('YYYY-MM-DDTHH:mm'),
-          endDate: moment.unix(this.$route.params.record.endDate).format('YYYY-MM-DDTHH:mm'),
+          startDate: this.$route.params.record.startDate,
+          endDate: this.$route.params.record.endDate,
           timezone: this.$route.params.record.timezone,
           venue: this.$route.params.record.venue,
           address: this.$route.params.record.address,
@@ -155,8 +155,8 @@
         let data = JSON.parse(JSON.stringify(this.input)) // removes getters and setters attached by vuejs
         data.isEnabled = true
         data.date = moment(data.date).unix()
-        data.startDate = moment(data.startDate).unix()
-        data.endDate = moment(data.endDate).unix()
+        data.startDate = this.input.startDate
+        data.endDate = this.input.endDate
         data.created = this.$route.params.record.created
         data.modified = moment().unix() // get current unix timestamp
         data.lastEditedBy = auth.currentUser.email

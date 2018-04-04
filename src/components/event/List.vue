@@ -37,7 +37,7 @@
               <span v-else style="cursor: pointer" @click="enableRecord(record['.key'])"><i class="fa fa-calendar-times-o text-danger"></i></span>
             </td>
             <td>{{ record.title.en }}</td>
-            <td>{{ record.startDate | date }} - {{ record.endDate | date }} <span class="text-uppercase">{{ record.timezone }}</span></td>
+            <td>{{ record.startDate }} - {{ record.endDate }} <span class="text-uppercase">{{ record.timezone }}</span></td>
             <td>{{ record.venue }}</td>
             <td>{{ record.created | date }}</td>
             <td>{{ record.modified | date }}</td>
