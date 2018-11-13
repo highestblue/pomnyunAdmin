@@ -73,7 +73,7 @@
 
 <script>
   import orderBy from 'lodash'
-  import {db} from '../../db'
+  import { db } from '../../db'
   import categoryObj from '../../categories'
   import filters from '../../filters'
 

@@ -5,6 +5,8 @@
         <ul class="row justify-conten-left align-items-center">
           <router-link to="/dashboard" tag="li" class="nav-item"><img src="../../../static/jungto-ci.png" width="30" height="30"></router-link>
           <router-link to="/slide" activeClass="active" tag="li" class="nav-item"><a class="nav-link">slide</a></router-link>
+          <router-link to="/article" activeClass="active" tag="li" class="nav-item"><a class="nav-link">article</a></router-link>
+          <router-link to="/video" activeClass="active" tag="li" class="nav-item"><a class="nav-link">video</a></router-link>
           <router-link to="/dharma" activeClass="active" tag="li" class="nav-item"><a class="nav-link">q&a</a></router-link>
           <router-link to="/event" activeClass="active" tag="li" class="nav-item"><a class="nav-link">event</a></router-link>
           <router-link to="/blog" activeClass="active" tag="li" class="nav-item"><a class="nav-link">blog</a></router-link>
