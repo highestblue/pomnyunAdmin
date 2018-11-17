@@ -13,13 +13,6 @@
         </div>
       </div>
 
-      <div class="form-group row">
-        <label class="col-md-1 col-form-label">Order</label>
-        <div class="col-md-5">
-          <input type="number" class="form-control" min="1" v-model="order" required>
-        </div>
-      </div>
-
       <div class="control-actions row">
         <div class="col-md-1"></div>
         <div class="col-md-11">

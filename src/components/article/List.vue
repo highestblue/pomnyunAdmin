@@ -15,10 +15,10 @@
     </section>
 
     <section id="list">
-      <table class="table">
+      <table class="table table-responsive">
         <thead>
           <tr>
-            <th>Order</th>
+            <th class="fit-width"></th>
             <th>Title</th>
             <th>Publisher</th>
             <th>Created</th>
@@ -28,10 +28,10 @@
           </tr>
         </thead>
 
-        <tbody>
-          <tr v-for="record in sortedRecords" :key="record['.key']">
-            <td>{{ record.order }}</td>
-            <td>{{ record.title }}</td>
+        <draggable v-model="filteredRecords" :element="'tbody'" @start="drag=true" @end="drag=false" @sort="changeOrder">
+          <tr v-for="record in filteredRecords" :key="record['.key']">
+            <td class="fit-wdith"><i class="fa fa-arrows"></i></td>
+            <td style="max-width: 200px;" data-toggle="tooltip" title="record.title">{{ record.title }}</td>
             <td>{{ record.publisher }}</td>
             <td>{{ record.created | date }}</td>
             <td>{{ record.modified | date }}</td>
@@ -41,7 +41,7 @@
               <button type="button" class="btn btn-sm btn-outline-danger" @click="deleteRecord(record['.key'])">Delete</button>
             </td>
           </tr>
-        </tbody>
+        </draggable>
       </table>
     </section>
 
@@ -59,10 +59,13 @@
 </template>
 
 <script>
-  import orderBy from 'lodash'
+  import draggable from 'vuedraggable'
   import { db } from '../../db'
 
   export default {
+    components: {
+      draggable,
+    },
     data() {
       return {
         filteredRecords: [],
@@ -73,14 +76,16 @@
       }
     },
     firebase: {
-      articleArr: db.ref('article')
-    },
-    computed: {
-      sortedRecords() {
-        return _.orderBy(this.filteredRecords, 'order', 'asc')
-      }
+      articleArr: db.ref('article').orderByChild('order')
     },
     methods: {
+      changeOrder(e) {
+        const source = this.articleArr[e.oldIndex]['.key']
+        const target = this.articleArr[e.newIndex]['.key']
+
+        this.$firebaseRefs.articleArr.child(source).child('order').set(e.newIndex)
+        this.$firebaseRefs.articleArr.child(target).child('order').set(e.oldIndex)
+      },
       editRecord(record) {
         this.$router.push({ name: 'articleEdit', params: {key: record['.key'], record: record }})
       },
@@ -108,6 +113,7 @@
       this.filteredRecords = this.articleArr
     }
   }
+
 </script>
 
 <style lang="scss" scoped>

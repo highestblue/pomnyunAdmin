@@ -18,11 +18,6 @@
         <div class="col-md-5">
           <input type="text" class="form-control" v-model="input.targetURL">
         </div>
-
-        <label class="col-md-1 col-form-label">Order</label>
-        <div class="col-md-5">
-          <input type="number" class="form-control" min="1" v-model="order" required>
-        </div>
       </div>
 
       <div class="control-actions row">

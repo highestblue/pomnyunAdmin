@@ -12,6 +12,15 @@
   overflow: hidden;
 }
 
+th,
+td {
+  &.fit-width {
+    width: 1%;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
 .cta1 {
   display: inline-block;
   height: 25px;
@@ -24,7 +33,7 @@
   transition: all 0.3s;
   &:hover, &:focus, &:active {
     color: $base-white;
-    background-color: $color3; 
+    background-color: $color3;
     text-decoration: none;
   }
 }
@@ -122,7 +131,7 @@
           color: $color3;
           text-transform: uppercase;
           letter-spacing: 1px;
-        } 
+        }
         &:-ma-input-placeholder {
           color: $color3;
           text-transform: uppercase;
@@ -144,7 +153,7 @@
           color: $base-white;
           outline: none;
           cursor: pointer;
-          
+
           span {
             &:first-child {
               font-weight: bold;
@@ -221,7 +230,7 @@
 
   h3 {
     font-size: $fsize6;
-    color: $base-gray;  
+    color: $base-gray;
   }
 
   h6 {
@@ -254,7 +263,7 @@
     font-size: $fsize5;
     line-height: 1.2rem;
     position: relative;
-    
+
     &:before {
       content: "\201c";
       position: absolute;

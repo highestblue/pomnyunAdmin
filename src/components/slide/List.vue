@@ -14,30 +14,30 @@
     </section>
 
     <section id="list">
-      <table class="table">
+      <table class="table table-responosive">
         <thead>
           <tr>
-            <th></th>
-            <th>Status</th>
+            <th class="fit-width">&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Enabled</th>
             <th>Name</th>
             <th>Target URL</th>
-            <th>Button Text</th>
             <th>Created</th>
             <th>Modified</th>
             <th>Action</th>
           </tr>
         </thead>
 
-        <tbody>
-          <tr v-for="record in sortedRecords" :key="record['.key']">
-            <td><a :href="record.imageURL" target="_blank"><img :src="record.imageURL" width="30" height="30"></a></td>
+        <draggable v-model="filteredRecords" :element="'tbody'" @start="drag=true" @end="drag=false" @sort="changeOrder">
+          <tr v-for="record in filteredRecords" :key="record['.key']">
+            <td class="fit-width"><i class="fa fa-arrows"></i></td>
+            <td><a :href="record.imageURL" target="_blank"><img :src="record.imageURL" width="70" height="30"></a></td>
             <td>
               <span style="cursor: pointer" v-if="record.isEnabled === true" @click="disableRecord(record['.key'])"><i class="fa fa-calendar-check-o text-success"></i></span>
               <span v-else style="cursor: pointer" @click="enableRecord(record['.key'])"><i class="fa fa-calendar-times-o text-danger"></i></span>
             </td>
             <td>{{ record.name }}</td>
-            <td>{{ record.targetURL }}</td>
-            <td>{{ record.buttonText }}</td>
+            <td>{{ record.targetURL || 'none' }}</td>
             <td>{{ record.created | date }}</td>
             <td>{{ record.modified | date }}</td>
             <td class="control-action">
@@ -45,7 +45,7 @@
               <button type="button" class="btn btn-sm btn-outline-danger" @click="deleteRecord(record['.key'])">Delete</button>
             </td>
           </tr>
-        </tbody>
+        </draggable>
       </table>
     </section>
 
@@ -63,11 +63,14 @@
 </template>
 
 <script>
-  import orderBy from 'lodash'
+  import draggable from 'vuedraggable'
   import { db } from '../../db'
   import filters from '../../filters'
 
   export default {
+    components: {
+      draggable,
+    },
     data () {
       return {
         filteredRecords: [],
@@ -78,14 +81,16 @@
       }
     },
     firebase: {
-      slideArr: db.ref('slide')
-    },
-    computed: {
-      sortedRecords() {
-        return _.orderBy(this.filteredRecords, 'created', 'desc')
-      }
+      slideArr: db.ref('slide').orderByChild('order')
     },
     methods: {
+      changeOrder(e) {
+        const source = this.slideArr[e.oldIndex]['.key']
+        const target = this.slideArr[e.newIndex]['.key']
+
+        this.$firebaseRefs.slideArr.child(source).child('order').set(e.newIndex)
+        this.$firebaseRefs.slideArr.child(target).child('order').set(e.oldIndex)
+      },
       editRecord (record) {
         this.$router.push({ name: 'slideEdit', params: {key: record['.key'], record: record }})
       },
