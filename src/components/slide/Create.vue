@@ -72,8 +72,7 @@
           targetURL: '',
           targetWindow: '',
           imageURL: '',
-          buttonText: '',
-          order: 0
+          buttonText: ''
         }
       }
     },
@@ -84,6 +83,7 @@
       submit () {
         let data = JSON.parse(JSON.stringify(this.input)) // removes getters and setters attached by vuejs
         data.isEnabled = true
+        data.order = this.slideArr.length
         data.created = moment().unix() // get current unix timestamp
         data.lastEditedBy = auth.currentUser.email
 

@@ -42,8 +42,7 @@
           title: '',
           publisher: '',
           targetURL: ''
-        },
-        order: 1
+        }
       }
     },
     firebase: {
@@ -52,7 +51,7 @@
     methods: {
       submit () {
         let data = JSON.parse(JSON.stringify(this.input)) // removes getters and setters attached by vuejs
-        data.order = this.order
+        data.order = this.articleArr.length
         data.created = moment().unix() // get current unix timestamp
         data.lastEditedBy = auth.currentUser.email
 
