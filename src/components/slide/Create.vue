@@ -31,6 +31,13 @@
           <input type="text" class="form-control" v-model="input.imageURL" required>
         </div>
 
+        <label for="mobileImageUrl" class="col-md-1 col-form-label">Moible Image URL</label>
+        <div class="col-md-5">
+          <input type="text" class="form-control" v-model="input.mobileImageUrl" required>
+        </div>
+      </div>
+
+      <div class="form-group row">
         <label for="buttonText" class="col-md-1 col-form-label">Button Text</label>
         <div class="col-md-5">
           <input type="text" class="form-control" v-model="input.buttonText">
@@ -72,6 +79,7 @@
           targetURL: '',
           targetWindow: '',
           imageURL: '',
+          mobileImageUrl: '',
           buttonText: ''
         }
       }
